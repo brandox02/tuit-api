@@ -9,57 +9,42 @@ import {
   Query,
 } from "@nestjs/common";
 import { CreateTuitDto, UpdateTuitDto } from "./dto";
+import { PaginationDto } from "./dto/pagination.dto";
 import { Tuit } from "./tuits.entity";
 import { TuitsService } from "./tuits.service";
-import { GetTuitsSearchParams, ResourceNotFoundError } from "./tuits.types";
 
 @Controller("tuits")
 export class TuitsController {
   constructor(private readonly tuitService: TuitsService) {}
 
   @Get()
-  getTuits(
+  async getTuits(
     @Query()
-    searchParams: GetTuitsSearchParams
-  ): Array<Tuit> {
-    const { searchTerm = "", orderBy = "" }: GetTuitsSearchParams =
-      searchParams;
-    console.log(`Tuits filter by ${searchTerm} and order by ${orderBy}`);
-    return this.tuitService.getAll();
+    params: PaginationDto
+  ): Promise<Array<Tuit>> {
+    return await this.tuitService.getAll(params);
   }
 
   @Get(":id")
-  getTuit(@Param("id") id: string): Tuit {
-    return this.tuitService.getOne(parseInt(id));
+  async getTuit(@Param("id") id: string): Promise<Tuit> {
+    return await this.tuitService.getOne(parseInt(id));
   }
 
   @Post()
-  createTuit(@Body() payload: CreateTuitDto): Tuit {
-    return this.tuitService.create(payload);
+  async createTuit(@Body() payload: CreateTuitDto): Promise<Tuit> {
+    return await this.tuitService.create(payload);
   }
 
   @Patch(":id")
-  updateTuit(
+  async updateTuit(
     @Param("id") id: string,
     @Body() body: UpdateTuitDto
-  ): Tuit | string {
-    try {
-      return this.tuitService.update(parseInt(id), body);
-    } catch (error) {
-      if (error instanceof ResourceNotFoundError) {
-        return "Recurso no encontrado";
-      }
-    }
+  ): Promise<Tuit> {
+    return await this.tuitService.update(parseInt(id), body);
   }
 
   @Delete(":id")
-  deleteTuit(@Param("id") id: string): Tuit | string {
-    try {
-      return this.tuitService.delete(parseInt(id));
-    } catch (error) {
-      if (error instanceof ResourceNotFoundError) {
-        return "Recurso no encontrado";
-      }
-    }
+  async deleteTuit(@Param("id") id: string): Promise<Tuit | string> {
+    return await this.tuitService.delete(parseInt(id));
   }
 }
