@@ -9,6 +9,12 @@ export class User {
   @Column()
   fullname: string;
 
+  @Column()
+  username: string;
+
+  @Column()
+  password: string;
+
   @OneToMany((_) => Tuit, (tuit) => tuit.user)
   tuits?: Tuit[];
 }

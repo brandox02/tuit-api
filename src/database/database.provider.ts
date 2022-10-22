@@ -4,6 +4,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConnectionOptions } from "typeorm";
 import { Environment } from "../common/enum";
 
+// import us dynamically the typeorm module for create the connection with de database.
 export const DatabaseProvider: DynamicModule = TypeOrmModule.forRootAsync({
   inject: [ConfigService],
   useFactory: async (config: ConfigService) => {

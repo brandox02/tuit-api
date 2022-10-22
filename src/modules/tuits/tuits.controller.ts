@@ -22,6 +22,7 @@ export class TuitsController {
     @Query()
     params: PaginationDto
   ): Promise<Array<Tuit>> {
+    // console.log("The money format is:", this.moneyProvider.formatToMoney(300));
     return await this.tuitService.getAll(params);
   }
 

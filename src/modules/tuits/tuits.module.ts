@@ -1,5 +1,6 @@
-import { Module } from "@nestjs/common";
+import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { LoggerMiddleware } from "./logger.middleware";
 import { TuitsController } from "./tuits.controller";
 import { Tuit } from "./tuits.entity";
 import { TuitsService } from "./tuits.service";
@@ -9,4 +10,8 @@ import { TuitsService } from "./tuits.service";
   controllers: [TuitsController],
   providers: [TuitsService],
 })
-export class TuitsModule {}
+export class TuitsModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes("tuits");
+  }
+}

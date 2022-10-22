@@ -15,5 +15,6 @@ async function bootstrap() {
     })
   );
   await app.listen(AppModule.port);
+  console.log(`App ready on: ` + (await app.getUrl()));
 }
 bootstrap();
